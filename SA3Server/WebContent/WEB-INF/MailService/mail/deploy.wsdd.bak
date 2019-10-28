@@ -1,0 +1,37 @@
+<!-- Use this file to deploy some handlers/chains and services      -->
+<!-- Two ways to do this:                                           -->
+<!--   java org.apache.axis.client.AdminClient deploy.wsdd          -->
+<!--      after the axis server is running                          -->
+<!-- or                                                             -->
+<!--   java org.apache.axis.utils.Admin client|server deploy.wsdd   -->
+<!--      from the same directory that the Axis engine runs         -->
+
+<deployment
+    xmlns="http://xml.apache.org/axis/wsdd/"
+    xmlns:java="http://xml.apache.org/axis/wsdd/providers/java">
+
+  <!-- Services from MailService WSDL service -->
+
+  <service name="Mail" provider="java:RPC" style="wrapped" use="literal">
+      <parameter name="wsdlTargetNamespace" value="http://mail"/>
+      <parameter name="wsdlServiceElement" value="MailService"/>
+      <parameter name="schemaQualified" value="http://mail"/>
+      <parameter name="wsdlServicePort" value="Mail"/>
+      <parameter name="className" value="mail.MailSoapBindingImpl"/>
+      <parameter name="wsdlPortType" value="Mail"/>
+      <parameter name="typeMappingVersion" value="1.2"/>
+      <operation name="validateEmailAddress" qname="operNS:validateEmailAddress" xmlns:operNS="http://mail" returnQName="retNS:validateEmailAddressReturn" xmlns:retNS="http://mail" returnType="rtns:boolean" xmlns:rtns="http://www.w3.org/2001/XMLSchema" soapAction="" >
+        <parameter qname="pns:url" xmlns:pns="http://mail" type="tns:string" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <operation name="sendEmail" qname="operNS:sendEmail" xmlns:operNS="http://mail" soapAction="" >
+        <parameter qname="pns:url" xmlns:pns="http://mail" type="tns:string" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+        <parameter qname="pns:payload" xmlns:pns="http://mail" type="tns:string" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <operation name="sendEmailBatch" qname="operNS:sendEmailBatch" xmlns:operNS="http://mail" soapAction="" >
+        <parameter qname="pns:urls" xmlns:pns="http://mail" type="tns:string" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+        <parameter qname="pns:payload" xmlns:pns="http://mail" type="tns:string" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      </operation>
+      <parameter name="allowedMethods" value="sendEmail validateEmailAddress sendEmailBatch"/>
+
+  </service>
+</deployment>
